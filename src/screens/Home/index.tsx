@@ -2,15 +2,52 @@ import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar } from "expo-status-bar";
 import { CaretDown, MapPin, BellRinging } from "phosphor-react-native";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import Sun from "../../assets/01d.svg";
-import Sun02d from "../../assets/02d.svg";
+import Sun from "../../assets/solDia.svg";
+import SunNubled from "../../assets/solNublado.svg";
+import Moon from "../../assets/luaNoite.svg";
+import { useState, useEffect, ReactNode } from "react";
 
 export function Home() {
+  const [infoTextUser, setInfoTextUser] = useState<string | null>(null);
+  const [infoClima, setInfoClima] = useState<string | null>(null);
+  const [containerGradient, setContainerGradient] = useState<string[]>([
+    "#fffc00",
+    "#ffffff",
+  ]);
+  const [imageIcon, setImageIcon] = useState<ReactNode | null>(null);
+  const [imageIconCard, setImageIconCard] = useState<ReactNode | null>(null);
+  const setData = () => {
+    const time = new Date().getHours();
+    // let message = "";
+    if (time > 4) {
+      setInfoTextUser("Bom dia, Nery");
+      setInfoClima("26°C");
+      setContainerGradient(["#ffac6f", "#ffe467"]);
+      setImageIcon(<Sun width={200} height={200} />);
+      setImageIconCard(<Moon width={40} height={40} />);
+    }
+    if (time > 11) {
+      setInfoTextUser("Boa tarde, Nery");
+      setInfoClima("31°C");
+      setContainerGradient(["#292A4E", "#715C77", "#C75C2E"]);
+      setImageIcon(<SunNubled width={200} height={200} />);
+      setImageIconCard(<Moon width={40} height={40} />);
+    }
+    if (time > 17) {
+      setInfoTextUser("Boa noite, Nery");
+      setInfoClima("21°C");
+      setContainerGradient(["#283E51", "#0A2342"]);
+      setImageIcon(<Moon width={200} height={200} />);
+      setImageIconCard(<Moon width={40} height={40} />);
+    }
+  };
+
+  useEffect(() => {
+    setData();
+  }, []);
+
   return (
-    <LinearGradient
-      colors={["#292A4E", "#715C77", "#C75C2E"]}
-      style={styles.container}
-    >
+    <LinearGradient colors={containerGradient} style={styles.container}>
       <View style={styles.content}>
         <View style={styles.header}>
           <View style={styles.headerLeft}>
@@ -21,43 +58,43 @@ export function Home() {
           <BellRinging color="#FFF" size={25} />
         </View>
         <View style={styles.info}>
-          <Text style={styles.infoTextUser}>Bom dia, Nery</Text>
-          <Sun width={200} height={200} />
-          <Text style={styles.infoTextClima}>21°C</Text>
+          <Text style={styles.infoTextUser}>{infoTextUser}</Text>
+          {imageIcon}
+          <Text style={styles.infoTextClima}>{infoClima}</Text>
           <Text style={styles.infoTextMaxMin}>Max.: 31° Min.:25°</Text>
         </View>
       </View>
       <View style={styles.footer}>
         <Text style={styles.footerText}>Previsão para os próximos 7 dias</Text>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          <View style={styles.footerCard}>
+          <View style={styles.footerCardFirst}>
             <Text style={styles.footerCardTitle}>Seg</Text>
-            <Sun02d width={40} height={40} />
+            {imageIconCard}
             <Text style={styles.footerCardPreview}>19°C</Text>
           </View>
           <View style={styles.footerCard}>
             <Text style={styles.footerCardTitle}>Seg</Text>
-            <Sun02d width={40} height={40} />
+            {imageIconCard}
             <Text style={styles.footerCardPreview}>19°C</Text>
           </View>
           <View style={styles.footerCard}>
             <Text style={styles.footerCardTitle}>Seg</Text>
-            <Sun02d width={40} height={40} />
+            {imageIconCard}
             <Text style={styles.footerCardPreview}>19°C</Text>
           </View>
           <View style={styles.footerCard}>
             <Text style={styles.footerCardTitle}>Seg</Text>
-            <Sun02d width={40} height={40} />
+            {imageIconCard}
             <Text style={styles.footerCardPreview}>19°C</Text>
           </View>
           <View style={styles.footerCard}>
             <Text style={styles.footerCardTitle}>Seg</Text>
-            <Sun02d width={40} height={40} />
+            {imageIconCard}
             <Text style={styles.footerCardPreview}>19°C</Text>
           </View>
           <View style={styles.footerCard}>
             <Text style={styles.footerCardTitle}>Seg</Text>
-            <Sun02d width={40} height={40} />
+            {imageIconCard}
             <Text style={styles.footerCardPreview}>19°C</Text>
           </View>
         </ScrollView>
@@ -112,13 +149,25 @@ const styles = StyleSheet.create({
   },
   footer: {
     width: "100%",
-    paddingLeft: 35,
+    // paddingLeft: 35,
     gap: 10,
   },
   footerText: {
     color: "#FFF",
     fontSize: 20,
+    paddingLeft: 35,
     fontWeight: "300",
+  },
+  footerCardFirst: {
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 6,
+    width: 99,
+    height: 129,
+    backgroundColor: "rgba(255,255,255, 0.23)",
+    borderRadius: 8,
+    marginRight: 14,
+    marginLeft: 35,
   },
   footerCard: {
     alignItems: "center",
